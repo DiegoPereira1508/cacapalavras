@@ -1,39 +1,57 @@
-// palavras.json será carregado aqui
-const palavras = [
-    { palavra: "PYTHON", dica: "Linguagem de programação" },
-    { palavra: "GITHUB", dica: "Plataforma de versionamento" },
-    { palavra: "JAVASCRIPT", dica: "Linguagem para web" },
-    { palavra: "HTML", dica: "Linguagem de marcação" },
-    { palavra: "CSS", dica: "Estilização de páginas" },
-    { palavra: "REACT", dica: "Biblioteca JavaScript" },
-    { palavra: "NODEJS", dica: "Runtime para JavaScript" },
-    { palavra: "API", dica: "Interface de programação" },
-    { palavra: "JSON", dica: "Formato de dados" },
-    { palavra: "SQL", dica: "Linguagem para banco de dados" }
-];
+const TAMANHO_TABULEIRO = 15;
+let tabuleiroArray = Array.from({ length: TAMANHO_TABULEIRO }, () => Array(TAMANHO_TABULEIRO).fill(""));
 
-const tabuleiro = document.getElementById("tabuleiro");
-const dicasDiv = document.getElementById("dicas");
+// Função para posicionar uma palavra no tabuleiro
+function posicionarPalavra(palavra, direcao) {
+    let linha, coluna, encaixeValido;
 
-// Função para criar o tabuleiro
-function criarTabuleiro() {
-    for (let i = 0; i < 100; i++) { // 10x10
-        const celula = document.createElement("input");
-        celula.type = "text";
-        celula.maxLength = 1;
-        celula.classList.add("celula");
-        tabuleiro.appendChild(celula);
+    do {
+        encaixeValido = true;
+        linha = Math.floor(Math.random() * TAMANHO_TABULEIRO);
+        coluna = Math.floor(Math.random() * TAMANHO_TABULEIRO);
+
+        // Verificar se a palavra cabe no tabuleiro
+        if (direcao === "horizontal" && coluna + palavra.length > TAMANHO_TABULEIRO) {
+            encaixeValido = false;
+        } else if (direcao === "vertical" && linha + palavra.length > TAMANHO_TABULEIRO) {
+            encaixeValido = false;
+        } else {
+            // Verificar se a palavra não conflita com outras
+            for (let i = 0; i < palavra.length; i++) {
+                const celula = direcao === "horizontal" ? tabuleiroArray[linha][coluna + i] : tabuleiroArray[linha + i][coluna];
+                if (celula !== "" && celula !== palavra[i]) {
+                    encaixeValido = false;
+                    break;
+                }
+            }
+        }
+    } while (!encaixeValido);
+
+    // Posicionar a palavra
+    for (let i = 0; i < palavra.length; i++) {
+        if (direcao === "horizontal") {
+            tabuleiroArray[linha][coluna + i] = palavra[i];
+        } else {
+            tabuleiroArray[linha + i][coluna] = palavra[i];
+        }
     }
 }
 
-// Função para exibir as dicas
-function exibirDicas() {
-    dicasDiv.innerHTML = "<h3>Dicas:</h3>";
-    palavras.forEach((palavra, index) => {
-        dicasDiv.innerHTML += `<p><strong>${index + 1}:</strong> ${palavra.dica}</p>`;
+// Função para preencher o tabuleiro com palavras
+function preencherTabuleiro(palavras) {
+    palavras.forEach(palavraObj => {
+        const palavra = palavraObj.palavra.toUpperCase();
+        const direcao = Math.random() < 0.5 ? "horizontal" : "vertical";
+        posicionarPalavra(palavra, direcao);
     });
-}
 
-// Inicialização
-criarTabuleiro();
-exibirDicas();
+    // Preencher espaços vazios com letras aleatórias
+    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for (let i = 0; i < TAMANHO_TABULEIRO; i++) {
+        for (let j = 0; j < TAMANHO_TABULEIRO; j++) {
+            if (tabuleiroArray[i][j] === "") {
+                tabuleiroArray[i][j] = letras[Math.floor(Math.random() * letras.length)];
+            }
+        }
+    }
+}
