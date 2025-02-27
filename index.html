@@ -10,10 +10,11 @@
     <h1>Jogo de Palavras Cruzadas</h1>
 
     <label for="tema">Escolha um tema:</label>
-    <select id="tema">
-        <option value="conhecimentosGerais">Conhecimentos Gerais</option>
-        <option value="esportes">Esportes</option>
-        <option value="filmes">Filmes</option>
+    <select id="tema" onchange="iniciarJogo()">
+        <option value="conhecimentos_gerais">Conhecimentos Gerais</option>
+        <option value="ditos_populares">Ditos Populares</option>
+        <option value="marcas_de_carros">Marcas de Carros</option>
+        <option value="frutas">Frutas</option>
     </select>
 
     <p>Tempo: <span id="tempo">00:00</span></p>
@@ -22,6 +23,7 @@
     <button onclick="verificarRespostas()">Verificar Respostas</button>
 
     <div id="tabuleiro"></div>
+    <div id="dicas"></div>
 
     <script src="js/script.js"></script>
 </body>
