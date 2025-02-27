@@ -1,5 +1,7 @@
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
 #tabuleiro {
@@ -20,4 +22,8 @@ body {
     border: 1px solid #ccc;
     background-color: #f9f9f9;
     text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
 }
