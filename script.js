@@ -1,8 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-    iniciarJogo(document.getElementById("tema").value);
+    const tema = document.getElementById("tema");
+    if (tema) {
+        iniciarJogo(tema.value);
+    }
 });
 
-document.getElementById("tema").addEventListener("change", (e) => {
+document.getElementById("tema")?.addEventListener("change", (e) => {
     iniciarJogo(e.target.value);
 });
 
@@ -15,22 +18,24 @@ function iniciarJogo(tema) {
 }
 
 function gerarTabuleiroVazio() {
-    tabuleiroArray = Array.from({ length: 15 }, () => Array(15).fill(""));
+    tabuleiroArray = Array.from({ length: 15 }, () => Array(15).fill(""));  // Reset the array
 }
 
 function criarTabuleiroVisual() {
     const tabuleiro = document.getElementById("tabuleiro");
-    tabuleiro.innerHTML = "";  // Limpa o tabuleiro antes de criar
+    if (tabuleiro) {
+        tabuleiro.innerHTML = "";  // Limpa o tabuleiro antes de criar
 
-    for (let i = 0; i < 15; i++) {
-        for (let j = 0; j < 15; j++) {
-            const input = document.createElement("input");
-            input.classList.add("celula");
-            input.maxLength = 1;
-            input.dataset.x = i;
-            input.dataset.y = j;
-            input.value = tabuleiroArray[i][j] || "";
-            tabuleiro.appendChild(input);
+        for (let i = 0; i < 15; i++) {
+            for (let j = 0; j < 15; j++) {
+                const input = document.createElement("input");
+                input.classList.add("celula");
+                input.maxLength = 1;
+                input.dataset.x = i;
+                input.dataset.y = j;
+                input.value = tabuleiroArray[i][j] || "";
+                tabuleiro.appendChild(input);
+            }
         }
     }
 }
