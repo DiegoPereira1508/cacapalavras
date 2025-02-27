@@ -10,10 +10,16 @@ h1 {
     color: #333;
 }
 
+#pontuacao {
+    font-size: 20px;
+    margin: 10px 0;
+    color: #555;
+}
+
 #tabuleiro {
     display: grid;
-    grid-template-columns: repeat(10, 40px);
-    grid-template-rows: repeat(10, 40px);
+    grid-template-columns: repeat(15, 40px);
+    grid-template-rows: repeat(15, 40px);
     gap: 2px;
     margin: 20px auto;
     justify-content: center;
@@ -26,6 +32,7 @@ h1 {
     font-size: 18px;
     border: 1px solid #ccc;
     background-color: #fff;
+    cursor: pointer;
 }
 
 .celula:focus {
