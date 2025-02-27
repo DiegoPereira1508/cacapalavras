@@ -1,47 +1,42 @@
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f4f4f4;
+    background-color: #f0f8ff;
+    font-family: 'Arial', sans-serif;
+    color: #444;
+    padding: 0;
     margin: 0;
-    padding: 20px;
 }
 
 h1 {
-    color: #333;
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #0077cc;
+}
+
+select {
+    padding: 5px;
+    font-size: 16px;
 }
 
 #pontuacao {
-    font-size: 20px;
-    margin: 10px 0;
-    color: #555;
+    font-weight: bold;
+    margin-top: 10px;
 }
 
 #tabuleiro {
-    display: grid;
-    grid-template-columns: repeat(15, 40px);
-    grid-template-rows: repeat(15, 40px);
-    gap: 2px;
-    margin: 20px auto;
-    justify-content: center;
+    margin-top: 20px;
+    border: 2px solid #0077cc;
+    background-color: #fff;
+    padding: 5px;
 }
 
 .celula {
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    font-size: 18px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    cursor: pointer;
+    font-weight: bold;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    transition: background-color 0.2s;
 }
 
 .celula:focus {
-    outline: none;
-    border-color: #666;
-}
-
-#dicas {
-    margin-top: 20px;
-    font-size: 16px;
-    color: #555;
+    background-color: #e0f7fa;
+    border-color: #0077cc;
 }
