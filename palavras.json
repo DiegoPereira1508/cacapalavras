@@ -1,12 +1,36 @@
-[
-    { "palavra": "PYTHON", "dica": "Linguagem de programação" },
-    { "palavra": "GITHUB", "dica": "Plataforma de versionamento" },
-    { "palavra": "JAVASCRIPT", "dica": "Linguagem para web" },
-    { "palavra": "HTML", "dica": "Linguagem de marcação" },
-    { "palavra": "CSS", "dica": "Estilização de páginas" },
-    { "palavra": "REACT", "dica": "Biblioteca JavaScript" },
-    { "palavra": "NODEJS", "dica": "Runtime para JavaScript" },
-    { "palavra": "API", "dica": "Interface de programação" },
-    { "palavra": "JSON", "dica": "Formato de dados" },
-    { "palavra": "SQL", "dica": "Linguagem para banco de dados" }
-]
+{
+    "conhecimentos_gerais": [
+        { "palavra": "EINSTEIN", "dica": "Físico famoso pela teoria da relatividade" },
+        { "palavra": "AMAZONIA", "dica": "Maior floresta tropical do mundo" },
+        { "palavra": "OXIGENIO", "dica": "Gás essencial para a respiração" },
+        { "palavra": "JUPITER", "dica": "Maior planeta do sistema solar" },
+        { "palavra": "ELEFANTE", "dica": "Maior animal terrestre" },
+        { "palavra": "VATICANO", "dica": "Menor país do mundo" },
+        { "palavra": "NILO", "dica": "Maior rio do mundo" },
+        { "palavra": "ATOMO", "dica": "Menor partícula de um elemento químico" }
+    ],
+    "ditos_populares": [
+        { "palavra": "AGUA", "dica": "Quem não tem colher, bebe direto da..." },
+        { "palavra": "CACHORRO", "dica": "Quem não tem... caça com gato" },
+        { "palavra": "PRESSA", "dica": "Quem tem... cozinha depressa" },
+        { "palavra": "FOME", "dica": "Quem tem... não tem sono" },
+        { "palavra": "SABEDORIA", "dica": "Quem tem... não precisa de força" },
+        { "palavra": "TEMPO", "dica": "Quem tem... não espera por ninguém" }
+    ],
+    "marcas_de_carros": [
+        { "palavra": "FIAT", "dica": "Marca italiana de carros" },
+        { "palavra": "TOYOTA", "dica": "Marca japonesa de carros" },
+        { "palavra": "FERRARI", "dica": "Marca de carros esportivos de luxo" },
+        { "palavra": "VOLKSWAGEN", "dica": "Marca alemã de carros" },
+        { "palavra": "FORD", "dica": "Marca americana de carros" },
+        { "palavra": "HYUNDAI", "dica": "Marca coreana de carros" }
+    ],
+    "frutas": [
+        { "palavra": "BANANA", "dica": "Fruta amarela e alongada" },
+        { "palavra": "MELANCIA", "dica": "Fruta grande e verde por fora, vermelha por dentro" },
+        { "palavra": "LARANJA", "dica": "Fruta cítrica e alaranjada" },
+        { "palavra": "MORANGO", "dica": "Fruta vermelha e doce" },
+        { "palavra": "UVA", "dica": "Fruta usada para fazer vinho" },
+        { "palavra": "ABACAXI", "dica": "Fruta tropical com casca espinhosa" }
+    ]
+}
