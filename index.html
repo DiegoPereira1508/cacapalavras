@@ -10,7 +10,7 @@
     <h1>Jogo de Palavras Cruzadas</h1>
 
     <label for="tema">Escolha um tema:</label>
-    <select id="tema" onchange="iniciarJogo()">
+    <select id="tema">
         <option value="conhecimentos_gerais">Conhecimentos Gerais</option>
         <option value="ditos_populares">Ditos Populares</option>
         <option value="marcas_de_carros">Marcas de Carros</option>
@@ -20,11 +20,16 @@
     <p>Tempo: <span id="tempo">00:00</span></p>
     <p>Pontuação: <span id="pontuacao">0</span></p>
 
-    <button onclick="verificarRespostas()">Verificar Respostas</button>
+    <button id="verificarRespostas">Verificar Respostas</button>
 
     <div id="tabuleiro"></div>
     <div id="dicas"></div>
 
     <script src="js/script.js"></script>
+    <script>
+        // Adicionando event listeners no JavaScript
+        document.getElementById('tema').addEventListener('change', iniciarJogo);
+        document.getElementById('verificarRespostas').addEventListener('click', verificarRespostas);
+    </script>
 </body>
 </html>
