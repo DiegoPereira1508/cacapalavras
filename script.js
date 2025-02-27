@@ -1,98 +1,60 @@
-const TAMANHO = 15;
-let tabuleiroArray = Array.from({ length: TAMANHO }, () => Array(TAMANHO).fill(""));
-let pontuacao = 0;
-let cronometro = null;
-let segundos = 0;
+document.addEventListener("DOMContentLoaded", () => {
+    iniciarJogo(document.getElementById("tema").value);
+});
 
-const palavras = {
-    conhecimentos_gerais: [
-        { palavra: "EINSTEIN", dica: "Físico famoso pela teoria da relatividade" },
-        { palavra: "AMAZONIA", dica: "Maior floresta tropical do mundo" }
-    ],
-    ditos_populares: [
-        { palavra: "AGUA", dica: "Quem não tem colher, bebe direto da..." },
-        { palavra: "CACHORRO", dica: "Quem não tem... caça com gato" }
-    ],
-    marcas_de_carros: [
-        { palavra: "FIAT", dica: "Marca italiana de carros" },
-        { palavra: "FORD", dica: "Marca americana de carros" }
-    ],
-    frutas: [
-        { palavra: "BANANA", dica: "Fruta amarela e alongada" },
-        { palavra: "UVA", dica: "Fruta usada para fazer vinho" }
-    ]
-};
+document.getElementById("tema").addEventListener("change", (e) => {
+    iniciarJogo(e.target.value);
+});
 
-const tabuleiro = document.getElementById("tabuleiro");
-const dicasDiv = document.getElementById("dicas");
-const temaSelect = document.getElementById("tema");
-const pontuacaoDiv = document.getElementById("pontuacao");
-const tempoDiv = document.getElementById("tempo");
-
-document.getElementById("verificar").addEventListener("click", verificarRespostas);
-temaSelect.addEventListener("change", () => iniciarJogo(temaSelect.value));
+let tabuleiroArray = [];  // Matriz do tabuleiro
 
 function iniciarJogo(tema) {
-    resetarCronometro();
-    tabuleiroArray = Array.from({ length: TAMANHO }, () => Array(TAMANHO).fill(""));
-    preencherTabuleiro(palavras[tema]);
+    gerarTabuleiroVazio();
     criarTabuleiroVisual();
-    exibirDicas(tema);
-    pontuacao = 0;
-    atualizarPontuacao();
-    iniciarCronometro();
+    iniciarTimer();
 }
 
-function preencherTabuleiro(lista) {
-    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    lista.forEach(({ palavra }) => {
-        let colocado = false;
-        palavra = palavra.toUpperCase();
-
-        while (!colocado) {
-            const horizontal = Math.random() < 0.5;
-            const linha = Math.floor(Math.random() * TAMANHO);
-            const coluna = Math.floor(Math.random() * TAMANHO);
-
-            if (horizontal && coluna + palavra.length <= TAMANHO ||
-                !horizontal && linha + palavra.length <= TAMANHO) {
-                colocado = true;
-                for (let i = 0; i < palavra.length; i++) {
-                    const x = horizontal ? linha : linha + i;
-                    const y = horizontal ? coluna + i : coluna;
-                    if (tabuleiroArray[x][y] && tabuleiroArray[x][y] !== palavra[i]) {
-                        colocado = false;
-                        break;
-                    }
-                }
-                if (colocado) {
-                    for (let i = 0; i < palavra.length; i++) {
-                        const x = horizontal ? linha : linha + i;
-                        const y = horizontal ? coluna + i : coluna;
-                        tabuleiroArray[x][y] = palavra[i];
-                    }
-                }
-            }
-        }
-    });
-
-    tabuleiroArray = tabuleiroArray.map(row => 
-        row.map(cell => cell || letras[Math.floor(Math.random() * letras.length)])
-    );
+function gerarTabuleiroVazio() {
+    tabuleiroArray = Array.from({ length: 15 }, () => Array(15).fill(""));
 }
 
 function criarTabuleiroVisual() {
-    tabuleiro.innerHTML = "";
-    tabuleiroArray.flat().forEach(letra => {
-        const input = document.createElement("input");
-        input.classList.add("celula");
-        input.maxLength = 1;
-        input.value = letra;
-        tabuleiro.appendChild(input);
-    });
+    const tabuleiro = document.getElementById("tabuleiro");
+    tabuleiro.innerHTML = "";  // Limpa o tabuleiro antes de criar
+
+    for (let i = 0; i < 15; i++) {
+        for (let j = 0; j < 15; j++) {
+            const input = document.createElement("input");
+            input.classList.add("celula");
+            input.maxLength = 1;
+            input.dataset.x = i;
+            input.dataset.y = j;
+            input.value = tabuleiroArray[i][j] || "";
+            tabuleiro.appendChild(input);
+        }
+    }
 }
 
-function exibirDicas(tema) {
-    dicasDiv.innerHTML = "<h3>Dicas:</h3>";
-    palavras[tema].forEach(({ dica
+function verificarRespostas() {
+    alert("Lógica de verificação ainda será implementada.");
+}
+
+// Timer básico (só pra exemplo)
+let segundos = 0;
+let timer;
+
+function iniciarTimer() {
+    clearInterval(timer);  // Reseta caso esteja rodando
+    segundos = 0;
+    atualizarTempo();
+    timer = setInterval(() => {
+        segundos++;
+        atualizarTempo();
+    }, 1000);
+}
+
+function atualizarTempo() {
+    const minutos = Math.floor(segundos / 60).toString().padStart(2, '0');
+    const segundosRestantes = (segundos % 60).toString().padStart(2, '0');
+    document.getElementById("tempo").innerText = `${minutos}:${segundosRestantes}`;
+}
