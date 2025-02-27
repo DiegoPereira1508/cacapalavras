@@ -1,13 +1,5 @@
 body {
     font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f0f8ff;
-    margin: 0;
-    padding: 20px;
-}
-
-h1 {
-    color: #0077cc;
 }
 
 #tabuleiro {
@@ -17,6 +9,7 @@ h1 {
     gap: 2px;
     margin: 20px auto;
     justify-content: center;
+    background-color: #fff;
 }
 
 .celula {
@@ -24,29 +17,7 @@ h1 {
     height: 40px;
     text-align: center;
     font-size: 18px;
-    text-transform: uppercase;
     border: 1px solid #ccc;
     background-color: #f9f9f9;
-}
-
-.celula:focus {
-    background-color: #e0f7fa;
-    outline: none;
-    border-color: #0077cc;
-}
-
-#dicas {
-    text-align: left;
-    margin: 20px auto;
-    display: inline-block;
-}
-
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #0077cc;
-    color: white;
-    border: none;
-    margin-top: 15px;
+    text-transform: uppercase;
 }
