@@ -1,7 +1,8 @@
 const TAMANHO = 15;
 let tabuleiroArray = Array.from({ length: TAMANHO }, () => Array(TAMANHO).fill(""));
-let segundos = 0, minutos = 0, intervalo;
 let pontuacao = 0;
+let cronometro = null;
+let segundos = 0;
 
 const palavras = {
     conhecimentos_gerais: [
@@ -27,41 +28,45 @@ const dicasDiv = document.getElementById("dicas");
 const temaSelect = document.getElementById("tema");
 const pontuacaoDiv = document.getElementById("pontuacao");
 const tempoDiv = document.getElementById("tempo");
-document.getElementById("verificar").addEventListener("click", verificarRespostas);
 
+document.getElementById("verificar").addEventListener("click", verificarRespostas);
 temaSelect.addEventListener("change", () => iniciarJogo(temaSelect.value));
 
 function iniciarJogo(tema) {
+    resetarCronometro();
     tabuleiroArray = Array.from({ length: TAMANHO }, () => Array(TAMANHO).fill(""));
     preencherTabuleiro(palavras[tema]);
     criarTabuleiroVisual();
     exibirDicas(tema);
     pontuacao = 0;
-    pontuacaoDiv.innerText = `Pontuação: ${pontuacao}`;
+    atualizarPontuacao();
     iniciarCronometro();
 }
 
-function preencherTabuleiro(palavrasDoTema) {
-    palavrasDoTema.forEach(({ palavra }) => {
-        let encaixou = false;
+function preencherTabuleiro(lista) {
+    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    lista.forEach(({ palavra }) => {
+        let colocado = false;
         palavra = palavra.toUpperCase();
 
-        while (!encaixou) {
+        while (!colocado) {
             const horizontal = Math.random() < 0.5;
             const linha = Math.floor(Math.random() * TAMANHO);
             const coluna = Math.floor(Math.random() * TAMANHO);
+
             if (horizontal && coluna + palavra.length <= TAMANHO ||
                 !horizontal && linha + palavra.length <= TAMANHO) {
-                encaixou = true;
+                colocado = true;
                 for (let i = 0; i < palavra.length; i++) {
                     const x = horizontal ? linha : linha + i;
                     const y = horizontal ? coluna + i : coluna;
                     if (tabuleiroArray[x][y] && tabuleiroArray[x][y] !== palavra[i]) {
-                        encaixou = false;
+                        colocado = false;
                         break;
                     }
                 }
-                if (encaixou) {
+                if (colocado) {
                     for (let i = 0; i < palavra.length; i++) {
                         const x = horizontal ? linha : linha + i;
                         const y = horizontal ? coluna + i : coluna;
@@ -72,59 +77,22 @@ function preencherTabuleiro(palavrasDoTema) {
         }
     });
 
-    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    tabuleiroArray = tabuleiroArray.map(linha =>
-        linha.map(c => c || letras[Math.floor(Math.random() * letras.length)])
+    tabuleiroArray = tabuleiroArray.map(row => 
+        row.map(cell => cell || letras[Math.floor(Math.random() * letras.length)])
     );
 }
 
 function criarTabuleiroVisual() {
     tabuleiro.innerHTML = "";
-    tabuleiro.style.gridTemplateColumns = `repeat(${TAMANHO}, 40px)`;
-    tabuleiro.style.gridTemplateRows = `repeat(${TAMANHO}, 40px)`;
-
     tabuleiroArray.flat().forEach(letra => {
         const input = document.createElement("input");
         input.classList.add("celula");
         input.maxLength = 1;
+        input.value = letra;
         tabuleiro.appendChild(input);
     });
 }
 
 function exibirDicas(tema) {
     dicasDiv.innerHTML = "<h3>Dicas:</h3>";
-    palavras[tema].forEach(({ dica }, i) => {
-        dicasDiv.innerHTML += `<p>${i + 1}. ${dica}</p>`;
-    });
-}
-
-function iniciarCronometro() {
-    clearInterval(intervalo);
-    minutos = segundos = 0;
-    atualizarTempo();
-    intervalo = setInterval(() => {
-        segundos++;
-        if (segundos === 60) { minutos++; segundos = 0; }
-        atualizarTempo();
-    }, 1000);
-}
-
-function atualizarTempo() {
-    tempoDiv.innerText = `Tempo: ${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
-}
-
-function verificarRespostas() {
-    let acertos = 0;
-    [...tabuleiro.children].forEach((celula, i) => {
-        const x = Math.floor(i / TAMANHO), y = i % TAMANHO;
-        if (celula.value.toUpperCase() === tabuleiroArray[x][y]) {
-            celula.style.backgroundColor = "#c8e6c9";
-            acertos++;
-        } else {
-            celula.style.backgroundColor = "#ffcdd2";
-        }
-    });
-    pontuacaoDiv.innerText = `Pontuação: ${acertos}`;
-}
-
-iniciarJogo(temaSelect.value);
+    palavras[tema].forEach(({ dica
