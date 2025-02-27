@@ -1,42 +1,64 @@
 body {
+    font-family: Arial, sans-serif;
+    text-align: center;
     background-color: #f0f8ff;
-    font-family: 'Arial', sans-serif;
-    color: #444;
-    padding: 0;
     margin: 0;
+    padding: 20px;
 }
 
 h1 {
-    font-size: 28px;
-    margin-bottom: 10px;
     color: #0077cc;
 }
 
-select {
-    padding: 5px;
-    font-size: 16px;
-}
-
-#pontuacao {
-    font-weight: bold;
-    margin-top: 10px;
+#pontuacao, #tempo {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #333;
 }
 
 #tabuleiro {
-    margin-top: 20px;
+    display: grid;
+    margin: 20px auto;
+    gap: 2px;
+    justify-content: center;
     border: 2px solid #0077cc;
-    background-color: #fff;
+    background-color: white;
     padding: 5px;
 }
 
 .celula {
-    font-weight: bold;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    font-size: 18px;
+    border: 1px solid #ccc;
     background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    transition: background-color 0.2s;
+    text-transform: uppercase;
 }
 
 .celula:focus {
     background-color: #e0f7fa;
+    outline: none;
     border-color: #0077cc;
+}
+
+#dicas {
+    margin-top: 15px;
+    text-align: left;
+    display: inline-block;
+}
+
+button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #005fa3;
 }
