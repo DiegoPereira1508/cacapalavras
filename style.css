@@ -10,20 +10,13 @@ h1 {
     color: #0077cc;
 }
 
-#pontuacao, #tempo {
-    font-size: 18px;
-    margin: 10px 0;
-    color: #333;
-}
-
 #tabuleiro {
     display: grid;
-    margin: 20px auto;
+    grid-template-columns: repeat(15, 40px);
+    grid-template-rows: repeat(15, 40px);
     gap: 2px;
+    margin: 20px auto;
     justify-content: center;
-    border: 2px solid #0077cc;
-    background-color: white;
-    padding: 5px;
 }
 
 .celula {
@@ -31,9 +24,9 @@ h1 {
     height: 40px;
     text-align: center;
     font-size: 18px;
+    text-transform: uppercase;
     border: 1px solid #ccc;
     background-color: #f9f9f9;
-    text-transform: uppercase;
 }
 
 .celula:focus {
@@ -43,22 +36,17 @@ h1 {
 }
 
 #dicas {
-    margin-top: 15px;
     text-align: left;
+    margin: 20px auto;
     display: inline-block;
 }
 
 button {
-    margin-top: 15px;
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
     background-color: #0077cc;
     color: white;
     border: none;
-    border-radius: 5px;
-}
-
-button:hover {
-    background-color: #005fa3;
+    margin-top: 15px;
 }
