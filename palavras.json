@@ -1,0 +1,12 @@
+[
+    { "palavra": "PYTHON", "dica": "Linguagem de programação" },
+    { "palavra": "GITHUB", "dica": "Plataforma de versionamento" },
+    { "palavra": "JAVASCRIPT", "dica": "Linguagem para web" },
+    { "palavra": "HTML", "dica": "Linguagem de marcação" },
+    { "palavra": "CSS", "dica": "Estilização de páginas" },
+    { "palavra": "REACT", "dica": "Biblioteca JavaScript" },
+    { "palavra": "NODEJS", "dica": "Runtime para JavaScript" },
+    { "palavra": "API", "dica": "Interface de programação" },
+    { "palavra": "JSON", "dica": "Formato de dados" },
+    { "palavra": "SQL", "dica": "Linguagem para banco de dados" }
+]

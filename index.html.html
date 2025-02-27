@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Completa</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0;
+        }
+        .calculadora {
+            background-color: #2c3e50;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            width: 350px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 24px;
+            text-align: right;
+            background-color: #34495e;
+            color: #ecf0f1;
+        }
+        .botoes {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        button {
+            padding: 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            background-color: #34495e;
+            color: #ecf0f1;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #1abc9c;
+        }
+        button.operador {
+            background-color: #e67e22;
+        }
+        button.operador:hover {
+            background-color: #d35400;
+        }
+        button.igual {
+            background-color: #2ecc71;
+            grid-column: span 2;
+        }
+        button.igual:hover {
+            background-color: #27ae60;
+        }
+        button.limpar {
+            background-color: #e74c3c;
+        }
+        button.limpar:hover {
+            background-color: #c0392b;
+        }
+        .historico {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #34495e;
+            border-radius: 10px;
+            color: #ecf0f1;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .historico h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+        .historico p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculadora">
+        <input type="text" id="display" disabled>
+        <div class="botoes">
+            <button onclick="limparDisplay()" class="limpar">C</button>
+            <button onclick="adicionarOperador('√')" class="operador">√</button>
+            <button onclick="adicionarOperador('^')" class="operador">^</button>
+            <button onclick="adicionarOperador('/')" class="operador">/</button>
+            <button onclick="adicionarNumero('7')">7</button>
+            <button onclick="adicionarNumero('8')">8</button>
+            <button onclick="adicionarNumero('9')">9</button>
+            <button onclick="adicionarOperador('*')" class="operador">*</button>
+            <button onclick="adicionarNumero('4')">4</button>
+            <button onclick="adicionarNumero('5')">5</button>
+            <button onclick="adicionarNumero('6')">6</button>
+            <button onclick="adicionarOperador('-')" class="operador">-</button>
+            <button onclick="adicionarNumero('1')">1</button>
+            <button onclick="adicionarNumero('2')">2</button>
+            <button onclick="adicionarNumero('3')">3</button>
+            <button onclick="adicionarOperador('+')" class="operador">+</button>
+            <button onclick="adicionarNumero('0')" style="grid-column: span 2;">0</button>
+            <button onclick="adicionarPonto()">.</button>
+            <button onclick="calcularResultado()" class="igual">=</button>
+            <button onclick="adicionarOperador('%')" class="operador">%</button>
+            <button onclick="adicionarOperador('sin')" class="operador">sin</button>
+            <button onclick="adicionarOperador('cos')" class="operador">cos</button>
+            <button onclick="adicionarOperador('tan')" class="operador">tan</button>
+            <button onclick="adicionarOperador('log')" class="operador">log</button>
+            <button onclick="adicionarOperador('exp')" class="operador">exp</button>
+            <button onclick="memoriaAdicionar()" class="operador">M+</button>
+            <button onclick="memoriaSubtrair()" class="operador">M-</button>
+            <button onclick="memoriaRecuperar()" class="operador">MR</button>
+            <button onclick="memoriaLimpar()" class="operador">MC</button>
+            <button onclick="converterCelsiusParaFahrenheit()" class="operador">°C to °F</button>
+            <button onclick="converterFahrenheitParaCelsius()" class="operador">°F to °C</button>
+            <button onclick="converterParaBinario()" class="operador">Bin</button>
+            <button onclick="converterParaHexadecimal()" class="operador">Hex</button>
+            <button onclick="converterParaOctal()" class="operador">Oct</button>
+        </div>
+        <div class="historico">
+            <h3>Histórico:</h3>
+            <div id="historico-lista"></div>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let historicoLista = document.getElementById('historico-lista');
+        let operacao = '';
+        let valorAnterior = '';
+        let operador = '';
+        let memoria = 0;
+
+        function adicionarNumero(numero) {
+            if (display.value === '0' || operacao === '=') {
+                display.value = numero;
+                operacao = '';
+            } else {
+                display.value += numero;
+            }
+        }
+
+        function adicionarPonto() {
+            if (!display.value.includes('.')) {
+                display.value += '.';
+            }
+        }
+
+        function adicionarOperador(op) {
+            if (operacao !== '=' && valorAnterior !== '') {
+                calcularResultado();
+            }
+            valorAnterior = display.value;
+            operador = op;
+            display.value = '0';
+        }
+
+        function calcularResultado() {
+            let valorAtual = display.value;
+            let resultado = 0;
+
+            switch (operador) {
+                case '+':
+                    resultado = parseFloat(valorAnterior) + parseFloat(valorAtual);
+                    break;
+                case '-':
+                    resultado = parseFloat(valorAnterior) - parseFloat(valorAtual);
+                    break;
+                case '*':
+                    resultado = parseFloat(valorAnterior) * parseFloat(valorAtual);
+                    break;
+                case '/':
+                    resultado = parseFloat(valorAnterior) / parseFloat(valorAtual);
+                    break;
+                case '^':
+                    resultado = Math.pow(parseFloat(valorAnterior), parseFloat(valorAtual));
+                    break;
+                case '√':
+                    resultado = Math.sqrt(parseFloat(valorAtual));
+                    break;
+                case 'sin':
+                    resultado = Math.sin(parseFloat(valorAtual));
+                    break;
+                case 'cos':
+                    resultado = Math.cos(parseFloat(valorAtual));
+                    break;
+                case 'tan':
+                    resultado = Math.tan(parseFloat(valorAtual));
+                    break;
+                case 'log':
+                    resultado = Math.log10(parseFloat(valorAtual));
+                    break;
+                case 'exp':
+                    resultado = Math.exp(parseFloat(valorAtual));
+                    break;
+                case '%':
+                    resultado = (parseFloat(valorAnterior) * parseFloat(valorAtual)) / 100;
+                    break;
+                default:
+                    resultado = valorAtual;
+            }
+
+            display.value = resultado;
+            operacao = '=';
+            valorAnterior = '';
+            operador = '';
+
+            // Adiciona ao histórico
+            adicionarAoHistorico(`${valorAnterior} ${operador} ${valorAtual} = ${resultado}`);
+        }
+
+        function limparDisplay() {
+            display.value = '0';
+            operacao = '';
+            valorAnterior = '';
+            operador = '';
+        }
+
+        function adicionarAoHistorico(operacao) {
+            let itemHistorico = document.createElement('p');
+            itemHistorico.textContent = operacao;
+            historicoLista.appendChild(itemHistorico);
+
+            // Mantém o histórico limitado a 10 itens
+            if (historicoLista.children.length > 10) {
+                historicoLista.removeChild(historicoLista.firstChild);
+            }
+        }
+
+        function memoriaAdicionar() {
+            memoria += parseFloat(display.value);
+        }
+
+        function memoriaSubtrair() {
+            memoria -= parseFloat(display.value);
+        }
+
+        function memoriaRecuperar() {
+            display.value = memoria;
+        }
+
+        function memoriaLimpar() {
+            memoria = 0;
+        }
+
+        function converterCelsiusParaFahrenheit() {
+            let celsius = parseFloat(display.value);
+            let fahrenheit = (celsius * 9/5) + 32;
+            display.value = fahrenheit;
+            adicionarAoHistorico(`${celsius} °C = ${fahrenheit} °F`);
+        }
+
+        function converterFahrenheitParaCelsius() {
+            let fahrenheit = parseFloat(display.value);
+            let celsius = (fahrenheit - 32) * 5/9;
+            display.value = celsius;
+            adicionarAoHistorico(`${fahrenheit} °F = ${celsius} °C`);
+        }
+
+        function converterParaBinario() {
+            let decimal = parseFloat(display.value);
+            display.value = decimal.toString(2);
+            adicionarAoHistorico(`${decimal} (Dec) = ${decimal.toString(2)} (Bin)`);
+        }
+
+        function converterParaHexadecimal() {
+            let decimal = parseFloat(display.value);
+            display.value = decimal.toString(16).toUpperCase();
+            adicionarAoHistorico(`${decimal} (Dec) = ${decimal.toString(16).toUpperCase()} (Hex)`);
+        }
+
+        function converterParaOctal() {
+            let decimal = parseFloat(display.value);
+            display.value = decimal.toString(8);
+            adicionarAoHistorico(`${decimal} (Dec) = ${decimal.toString(8)} (Oct)`);
+        }
+    </script>
+
+</body>
+</html>
