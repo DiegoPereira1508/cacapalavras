@@ -1,57 +1,130 @@
-const TAMANHO_TABULEIRO = 15;
-let tabuleiroArray = Array.from({ length: TAMANHO_TABULEIRO }, () => Array(TAMANHO_TABULEIRO).fill(""));
+const TAMANHO = 15;
+let tabuleiroArray = Array.from({ length: TAMANHO }, () => Array(TAMANHO).fill(""));
+let segundos = 0, minutos = 0, intervalo;
+let pontuacao = 0;
 
-// Função para posicionar uma palavra no tabuleiro
-function posicionarPalavra(palavra, direcao) {
-    let linha, coluna, encaixeValido;
+const palavras = {
+    conhecimentos_gerais: [
+        { palavra: "EINSTEIN", dica: "Físico famoso pela teoria da relatividade" },
+        { palavra: "AMAZONIA", dica: "Maior floresta tropical do mundo" }
+    ],
+    ditos_populares: [
+        { palavra: "AGUA", dica: "Quem não tem colher, bebe direto da..." },
+        { palavra: "CACHORRO", dica: "Quem não tem... caça com gato" }
+    ],
+    marcas_de_carros: [
+        { palavra: "FIAT", dica: "Marca italiana de carros" },
+        { palavra: "FORD", dica: "Marca americana de carros" }
+    ],
+    frutas: [
+        { palavra: "BANANA", dica: "Fruta amarela e alongada" },
+        { palavra: "UVA", dica: "Fruta usada para fazer vinho" }
+    ]
+};
 
-    do {
-        encaixeValido = true;
-        linha = Math.floor(Math.random() * TAMANHO_TABULEIRO);
-        coluna = Math.floor(Math.random() * TAMANHO_TABULEIRO);
+const tabuleiro = document.getElementById("tabuleiro");
+const dicasDiv = document.getElementById("dicas");
+const temaSelect = document.getElementById("tema");
+const pontuacaoDiv = document.getElementById("pontuacao");
+const tempoDiv = document.getElementById("tempo");
+document.getElementById("verificar").addEventListener("click", verificarRespostas);
 
-        // Verificar se a palavra cabe no tabuleiro
-        if (direcao === "horizontal" && coluna + palavra.length > TAMANHO_TABULEIRO) {
-            encaixeValido = false;
-        } else if (direcao === "vertical" && linha + palavra.length > TAMANHO_TABULEIRO) {
-            encaixeValido = false;
-        } else {
-            // Verificar se a palavra não conflita com outras
-            for (let i = 0; i < palavra.length; i++) {
-                const celula = direcao === "horizontal" ? tabuleiroArray[linha][coluna + i] : tabuleiroArray[linha + i][coluna];
-                if (celula !== "" && celula !== palavra[i]) {
-                    encaixeValido = false;
-                    break;
+temaSelect.addEventListener("change", () => iniciarJogo(temaSelect.value));
+
+function iniciarJogo(tema) {
+    tabuleiroArray = Array.from({ length: TAMANHO }, () => Array(TAMANHO).fill(""));
+    preencherTabuleiro(palavras[tema]);
+    criarTabuleiroVisual();
+    exibirDicas(tema);
+    pontuacao = 0;
+    pontuacaoDiv.innerText = `Pontuação: ${pontuacao}`;
+    iniciarCronometro();
+}
+
+function preencherTabuleiro(palavrasDoTema) {
+    palavrasDoTema.forEach(({ palavra }) => {
+        let encaixou = false;
+        palavra = palavra.toUpperCase();
+
+        while (!encaixou) {
+            const horizontal = Math.random() < 0.5;
+            const linha = Math.floor(Math.random() * TAMANHO);
+            const coluna = Math.floor(Math.random() * TAMANHO);
+            if (horizontal && coluna + palavra.length <= TAMANHO ||
+                !horizontal && linha + palavra.length <= TAMANHO) {
+                encaixou = true;
+                for (let i = 0; i < palavra.length; i++) {
+                    const x = horizontal ? linha : linha + i;
+                    const y = horizontal ? coluna + i : coluna;
+                    if (tabuleiroArray[x][y] && tabuleiroArray[x][y] !== palavra[i]) {
+                        encaixou = false;
+                        break;
+                    }
+                }
+                if (encaixou) {
+                    for (let i = 0; i < palavra.length; i++) {
+                        const x = horizontal ? linha : linha + i;
+                        const y = horizontal ? coluna + i : coluna;
+                        tabuleiroArray[x][y] = palavra[i];
+                    }
                 }
             }
         }
-    } while (!encaixeValido);
-
-    // Posicionar a palavra
-    for (let i = 0; i < palavra.length; i++) {
-        if (direcao === "horizontal") {
-            tabuleiroArray[linha][coluna + i] = palavra[i];
-        } else {
-            tabuleiroArray[linha + i][coluna] = palavra[i];
-        }
-    }
-}
-
-// Função para preencher o tabuleiro com palavras
-function preencherTabuleiro(palavras) {
-    palavras.forEach(palavraObj => {
-        const palavra = palavraObj.palavra.toUpperCase();
-        const direcao = Math.random() < 0.5 ? "horizontal" : "vertical";
-        posicionarPalavra(palavra, direcao);
     });
 
-    // Preencher espaços vazios com letras aleatórias
     const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    for (let i = 0; i < TAMANHO_TABULEIRO; i++) {
-        for (let j = 0; j < TAMANHO_TABULEIRO; j++) {
-            if (tabuleiroArray[i][j] === "") {
-                tabuleiroArray[i][j] = letras[Math.floor(Math.random() * letras.length)];
-            }
-        }
-    }
+    tabuleiroArray = tabuleiroArray.map(linha =>
+        linha.map(c => c || letras[Math.floor(Math.random() * letras.length)])
+    );
 }
+
+function criarTabuleiroVisual() {
+    tabuleiro.innerHTML = "";
+    tabuleiro.style.gridTemplateColumns = `repeat(${TAMANHO}, 40px)`;
+    tabuleiro.style.gridTemplateRows = `repeat(${TAMANHO}, 40px)`;
+
+    tabuleiroArray.flat().forEach(letra => {
+        const input = document.createElement("input");
+        input.classList.add("celula");
+        input.maxLength = 1;
+        tabuleiro.appendChild(input);
+    });
+}
+
+function exibirDicas(tema) {
+    dicasDiv.innerHTML = "<h3>Dicas:</h3>";
+    palavras[tema].forEach(({ dica }, i) => {
+        dicasDiv.innerHTML += `<p>${i + 1}. ${dica}</p>`;
+    });
+}
+
+function iniciarCronometro() {
+    clearInterval(intervalo);
+    minutos = segundos = 0;
+    atualizarTempo();
+    intervalo = setInterval(() => {
+        segundos++;
+        if (segundos === 60) { minutos++; segundos = 0; }
+        atualizarTempo();
+    }, 1000);
+}
+
+function atualizarTempo() {
+    tempoDiv.innerText = `Tempo: ${String(minutos).padStart(2, '0')}:${String(segundos).padStart(2, '0')}`;
+}
+
+function verificarRespostas() {
+    let acertos = 0;
+    [...tabuleiro.children].forEach((celula, i) => {
+        const x = Math.floor(i / TAMANHO), y = i % TAMANHO;
+        if (celula.value.toUpperCase() === tabuleiroArray[x][y]) {
+            celula.style.backgroundColor = "#c8e6c9";
+            acertos++;
+        } else {
+            celula.style.backgroundColor = "#ffcdd2";
+        }
+    });
+    pontuacaoDiv.innerText = `Pontuação: ${acertos}`;
+}
+
+iniciarJogo(temaSelect.value);
